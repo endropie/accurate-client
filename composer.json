@@ -1,6 +1,6 @@
 {
     "name": "endropie/accurate-model",
-    "description": "Laravel supported accurate package",
+    "description": "Laravel supported accurate-online (api) package",
     "type": "library",
     "minimum-stability": "dev",
     "require": {
