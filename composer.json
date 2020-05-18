@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Endropie\\AccurateModel": "src"
+            "Endropie\\AccurateModel\\": "src"
         }
     },
     "license": "MIT",
