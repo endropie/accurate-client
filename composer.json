@@ -12,11 +12,6 @@
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.x-dev"
-        }
-    },
     "require": {
         "php": "^7.1"
     },
