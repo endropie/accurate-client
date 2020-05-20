@@ -1,7 +1,18 @@
 <?php
 return [
-    "baseUrl" => "/accurate",
-    "database" => env('ACCURATE_DB', null),
+
+    "database" => env('ACCURATE_DATABASE', null),
+
+    "login_route" => "/accurate/login",
+
+    "callback_route" => "/accurate/callback",
+
+    "redirect_autologin" => true,
+
+    "redirect_back_route" => true,
+
+    "redirect_callback_data" => true,
+
     "scope" => [
         "item_view", "item_save",
         "branch_view", "branch_save",
@@ -26,6 +37,7 @@ return [
         "purchase_requisition_view", "purchase_requisition_save",
         "purchase_return_view", "purchase_return_save",
     ],
+
     "modules" => [
         "branch" => [
             "bulk-save" => "/accurate/api/branch/bulk-save.do",
