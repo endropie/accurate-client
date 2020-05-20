@@ -2,9 +2,16 @@
     "name": "endropie/accurate-model",
     "description": "Laravel package supporting for accurate-online (API)",
     "type": "library",
+    "keywords": ["library", "laravel"],
     "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "endropie",
+            "email": "hendrowibowo@msn.com"
+        }
+    ],
     "require": {
-        "illuminate/support": "^5.6",
         "php": "^7.1"
     },
     "require-dev": {
@@ -15,11 +22,9 @@
             "Endropie\\AccurateModel\\": "src"
         }
     },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "endropie",
-            "email": "hendrowibowo@msn.com"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
         }
-    ]
+    }
 }
