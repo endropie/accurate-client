@@ -2,7 +2,6 @@
 
 namespace Endropie\AccurateModel;
 
-use ErrorException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
@@ -71,7 +70,7 @@ class Accurate
 
     public static function callbackUrl ()
     {
-        return "http://localhost:8000"
+        return request()->getSchemeAndHttpHost()
             . \Str::start('/', config('accurate.callback_route', '/accurate/callback'));
     }
 
@@ -134,6 +133,7 @@ class Accurate
             else return $response->json();
 
         });
+
         Route::get(config('accurate.login_route', '/accurate/login'), function () {
 
             static::beforeLogin();
