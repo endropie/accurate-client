@@ -7,11 +7,11 @@ return [
 
     "callback_route" => "/accurate/callback",
 
-    "redirect_autologin" => true,
+    "redirect_autologin" => false,
 
-    "redirect_back_route" => true,
+    "redirect_back_route" => false,
 
-    "redirect_callback_data" => true,
+    "redirect_callback_data" => false,
 
     "scope" => [
         "item_view", "item_save",

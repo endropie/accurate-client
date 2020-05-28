@@ -4,17 +4,17 @@ namespace Endropie\AccurateModel;
 
 class Functionality
 {
-    // private $model;
-    private $module;
-    private $methods;
-    public $client;
+    public $module;
+    public $methods;
+    public $manager;
 
-    public function __construct($module, $model)
+    public function __construct($manager)
     {
-        // $this->model = $model;
+        $module = $manager->model->accurate_options['module'];
+
+        $this->manager = $manager;
         $this->module = $module;
-        $this->methods = config("accurate.modules.$module", []);
-        $this->client = Accurate::client();
+        $this->methods = config("accurate.modules." . $this->module , []);
     }
 
     public function __call($function, $arguments)
@@ -30,9 +30,10 @@ class Functionality
             $argument = $arguments[0] ?? [];
 
             $uri = $this->methods[$name];
-            $url = Accurate::url($uri);
+            $url = $this->manager->url($uri);
 
-            $client = $this->client->post($url, $argument)->throw();
+
+            $client = $this->manager->client()->post($url, $argument)->throw();
 
             return $client->json();
         }
