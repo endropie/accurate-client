@@ -1,6 +1,6 @@
 <?php
 
-namespace Endropie\AccurateModel;
+namespace Endropie\AccurateClient\Tools;
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Http;

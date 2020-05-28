@@ -11,23 +11,22 @@
 #
 # ===================================================================================================
 
-namespace Endropie\AccurateModel\Traits;
+namespace Endropie\AccurateClient\Traits;
 
-use Endropie\AccurateModel\Accurate;
-use Endropie\AccurateModel\Elequence;
+use Endropie\AccurateClient\Tools\ManagerModel;
 
 trait AccurateTrait
 {
 
     protected function getAccurateAttribute()
     {
-        return app()->make(Elequence::class, ['model' => $this]);
+        return app()->make(ManagerModel::class, ['model' => $this]);
     }
 
     protected function accurateScope($query, $options = null)
     {
         dd('SCOPE', $query);
-        return app()->make(Elequence::class, ['model' => $this]);
+        return app()->make(ManagerModel::class, ['model' => $this]);
     }
 
     public function accurateKey()

@@ -1,8 +1,8 @@
 <?php
 
-namespace Endropie\AccurateModel;
+namespace Endropie\AccurateClient;
 
-use Endropie\AccurateModel\Manager;
+use Endropie\AccurateClient\Tools\Manager;
 use Illuminate\Support\Facades\Facade as BaseFacade;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -90,12 +90,6 @@ class Facade extends BaseFacade {
             $uri = static::manager()->getConfig('authorize_uri') . "?$parameter";
 
             return redirect($uri);
-        });
-
-        Route::get('/accurate/redirect', function() {
-            $url = urldecode('http://localhost:8080/%23/');
-            dd($url);
-            return '<a href="'. $url .'?accurate%5Bauth%5D%5Baccess_token%5D=77845d35-5d6a-4f95-978a-5fa37f5af2b9&accurate%5Bauth%5D%5Brefresh_token%5D=e6f66821-b931-42d3-a7fa-4c296afad9dc&accurate%5Bauth%5D%5Bexpires_in%5D=510155&accurate%5Bdb%5D%5Bid%5D=174661&accurate%5Bdb%5D%5Bsession%5D=86b48c0c-e900-4810-8167-b6f2a59996be&accurate%5Bdb%5D%5Bhost%5D=https%3A%2F%2Fpublic.accurate.id&accurate%5Bdb%5D%5Badmin%5D=1">click</a>';
         });
     }
 

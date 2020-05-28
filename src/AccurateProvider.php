@@ -1,8 +1,8 @@
 <?php
 
-namespace Endropie\AccurateModel;
+namespace Endropie\AccurateClient;
 
-use Endropie\AccurateModel\Accurate;
+use Endropie\AccurateClient\Tools\Manager;
 use Illuminate\Support\ServiceProvider;
 
 class AccurateProvider extends ServiceProvider
@@ -11,7 +11,7 @@ class AccurateProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('accurate', function ($app) {
-            return new Accurate($app);
+            return new Manager($app);
         });
 
         $this->mergeConfigFrom(__DIR__.'/config/accurate.php', 'accurate');

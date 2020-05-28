@@ -1,8 +1,8 @@
 <?php
 
-namespace Endropie\AccurateModel;
+namespace Endropie\AccurateClient\Tools;
 
-class Functionality
+class ManagerApi
 {
     public $module;
     public $methods;

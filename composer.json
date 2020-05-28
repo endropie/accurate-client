@@ -1,5 +1,5 @@
 {
-    "name": "endropie/accurate-model",
+    "name": "endropie/accurate-client",
     "description": "Laravel package supporting for accurate-online (API)",
     "type": "library",
     "keywords": ["library", "laravel"],
@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Endropie\\AccurateModel\\": "src"
+            "Endropie\\AccurateClient\\": "src"
         }
     }
 }

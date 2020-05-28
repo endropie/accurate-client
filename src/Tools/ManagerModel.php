@@ -1,8 +1,8 @@
 <?php
 
-namespace Endropie\AccurateModel;
+namespace Endropie\AccurateClient\Tools;
 
-class Elequence extends Manager
+class ManagerModel extends Manager
 {
     public $api;
     public $model;
@@ -12,7 +12,7 @@ class Elequence extends Manager
         if ($model)
         {
             $this->model = $model;
-            $this->api = app()->make(Functionality::class, [
+            $this->api = app()->make(ManagerApi::class, [
                 'manager' => $this,
             ]);
         }
@@ -27,7 +27,6 @@ class Elequence extends Manager
         $methodedName = \Str::camel("accurate_pushed");
 
         $record = $this->getRecord();
-        dd('RECORD', $record, $this->model->accurate_opttions['attributes']);
 
         $record['id'] = $this->model->accurateKey();
 
@@ -35,8 +34,6 @@ class Elequence extends Manager
         {
             $record = $this->model::$methodingName($record, $this->model);
         }
-
-        // dd('CHEK', $record, method_exists($this->model, $methodingName));
 
         $api = config('accurate.modules.'. $this->api->module);
 
@@ -112,7 +109,7 @@ class Elequence extends Manager
             {
                 $avar = explode('.', $key);
                 $fill = "";
-                foreach ($avar as $key => $var) {
+                foreach ($avar as $i => $var) {
 
                     if ($var == "*")
                     {
@@ -126,8 +123,6 @@ class Elequence extends Manager
             }
             return [$key => $item];
         })->toArray();
-
-        dd('RECORD', $data);
 
         return $data;
     }
