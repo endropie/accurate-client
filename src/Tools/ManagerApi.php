@@ -8,11 +8,12 @@ class ManagerApi
     public $methods;
     public $manager;
 
-    public function __construct($manager)
+    public function __construct($module)
     {
-        $module = $manager->model->accurate_options['module'];
+        // $module = $manager->model->accurate_model;
+        // $this->manager = $manager;
 
-        $this->manager = $manager;
+        $this->manager = new Manager();
         $this->module = $module;
         $this->methods = config("accurate.modules." . $this->module , []);
     }

@@ -13,20 +13,26 @@
 
 namespace Endropie\AccurateClient\Traits;
 
+use Endropie\AccurateClient\Tools\ManagerBuilder;
 use Endropie\AccurateClient\Tools\ManagerModel;
 
 trait AccurateTrait
 {
+    public $xxx;
 
     protected function getAccurateAttribute()
     {
+        // dd('aatr', $this);
         return app()->make(ManagerModel::class, ['model' => $this]);
     }
 
-    protected function accurateScope($query, $options = null)
+    // public function accurate ($module = null) {
+    //     return app()->make(ManagerModel::class, ['model' => $this]);
+    // }
+
+    protected function scopeAccurate($builder, $options = null)
     {
-        dd('SCOPE', $query);
-        return app()->make(ManagerModel::class, ['model' => $this]);
+        return app()->make(ManagerBuilder::class, ['builder' => $builder]);
     }
 
     public function accurateKey()
@@ -40,13 +46,23 @@ trait AccurateTrait
         return $this->save();
     }
 
-    public function getAccuratePrimaryKeyAttribute ()
+    public function getAccuratePrimaryKeyAttribute () : string
     {
         return !property_exists($this, 'accurate_primary_key') ? "accurate_model_id" : $this->accurate_primary_key;
     }
 
-    public function getAccurateOptionsAttribute ()
+    public function getAccurateModelAttribute () : string
     {
-        return !property_exists($this, 'accurate_options') ? [] : $this->accurate_options;
+        return !property_exists($this, 'accurate_model') ? [] : $this->accurate_model;
+    }
+
+    public function getAccuratePushAttributesAttribute () : array
+    {
+        return !property_exists($this, 'accurate_push_attributes') ? [] : $this->accurate_push_attributes;
+    }
+
+    public function getAccuratePushCastsAttribute () : array
+    {
+        return !property_exists($this, 'accurate_push_casts') ? [] : $this->accurate_push_casts;
     }
 }

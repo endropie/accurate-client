@@ -22,5 +22,14 @@ class AccurateProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/config/accurate.php' => config_path('accurate.php'),
         ]);
+
+        $this->expectJsonResponse();
+    }
+
+    protected function expectJsonResponse()
+    {
+        if ($host = request()->header('X-Accurate-DB-Host')) session()->put('accurate.db.host', $host);
+        if ($session = request()->header('X-Accurate-DB-Session')) session()->put('accurate.db.session', $session);
+        if ($token = request()->header('X-Accurate-Auth-access_token')) session()->put('accurate.auth.access_token', $token);
     }
 }

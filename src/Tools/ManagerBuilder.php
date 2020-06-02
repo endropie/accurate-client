@@ -2,18 +2,22 @@
 
 namespace Endropie\AccurateClient\Tools;
 
-class ManagerModel extends Manager
+class ManagerBuilder
 {
     public $api;
+    public $manager;
+    public $builder;
     public $model;
 
-    public function __construct($model = null)
+    public function __construct($builder = null)
     {
-        if ($model)
+        if ($builder)
         {
-            $this->model = $model;
+            $this->manager = new Manager();
+            $this->builder = $builder;
+            $this->model = $builder->getModel();
             $this->api = app()->make(ManagerApi::class, [
-                'manager' => $this,
+                'module' => $builder->getModel()->getAccurateModelAttribute(),
             ]);
         }
 
@@ -39,11 +43,11 @@ class ManagerModel extends Manager
 
         if (!$api) abort(501, "Module '".$this->api->module."' undefined");
 
-        $uri = $this->url($api['save']);
+        $uri = $this->manager->url($api['save']);
 
-        if (!$api) abort(501, "Mthod 'save' Module '".$this->api->module."' undefined");
+        if (!$api) abort(501, "Method 'save' Module '".$this->api->module."' undefined");
 
-        $response = $this->client()->get($uri, $record)->throw();
+        $response = $this->manager->client()->get($uri, $record)->throw();
 
         if ($response->successful() && $response['s'])
         {
@@ -64,10 +68,10 @@ class ManagerModel extends Manager
     {
         if (!$this->model) abort(501, 'Method getRecord not allowed! [error: model undefined]');
 
-        $arrays = array_map(function ($item) {
+        $arrays = collect($this->model->accurate_push_attributes ?? [])->mapWithKeys(function($item, $code) {
+
             $avar = explode('.', $item);
-            if (sizeof($avar) > 1)
-            {
+            if (sizeof($avar) > 1) {
                 $variable = null;
                 $relation = $this->model;
                 foreach ($avar as $key => $var) {
@@ -86,7 +90,6 @@ class ManagerModel extends Manager
                     if (!is_a($relation, "Illuminate\Database\Eloquent\Collection"))
                     {
                         $relation = $relation->{$var};
-
                     }
                     else
                     {
@@ -96,13 +99,12 @@ class ManagerModel extends Manager
 
                     $variable = $relation;
                 }
-                return $variable;
+                return [$code => $variable];
             }
             else {
-
-                return $this->castingRecord($item, $this->model->{$item});
+                return [$code => $this->castingRecord($code, $this->model->{$item})];
             }
-          }, array_flip($this->model->accurate_options['attributes'] ?? []));
+        })->toArray();
 
         $data = collect($arrays)->mapWithKeys(function ($item, $key) {
             if (\Str::contains($key, '*'))
@@ -119,7 +121,6 @@ class ManagerModel extends Manager
                         // $fill .= $var;
                     }
                 }
-                // dd('key', $key, $item);
             }
             return [$key => $item];
         })->toArray();
@@ -141,7 +142,7 @@ class ManagerModel extends Manager
     {
         if (!$this->model) abort(501, 'Method getRecord not allowed! [error: model undefined]');
 
-        $casts = $this->model->accurate_options['casts'] ?? [];
+        $casts = $this->model->accurate_push_casts ?? [];
 
         if(!isset($casts[$item]) || $value === null) return $value;
 
