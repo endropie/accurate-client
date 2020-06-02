@@ -23,6 +23,15 @@ class ManagerBuilder
 
     }
 
+    public function forget()
+    {
+        if (!$this->model) abort(501, '[AACURATE] model property undefined!');
+        $model = $this->model;
+
+        $model->{$model->accurate_primary_key} = null;
+        return $model->save();
+    }
+
     public function push ()
     {
         if (!$this->model) abort(501, 'Method Push not allowed! [error: model undefined]');

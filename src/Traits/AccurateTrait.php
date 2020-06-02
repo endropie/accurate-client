@@ -20,17 +20,7 @@ trait AccurateTrait
 {
     public $xxx;
 
-    protected function getAccurateAttribute()
-    {
-        // dd('aatr', $this);
-        return app()->make(ManagerModel::class, ['model' => $this]);
-    }
-
-    // public function accurate ($module = null) {
-    //     return app()->make(ManagerModel::class, ['model' => $this]);
-    // }
-
-    protected function scopeAccurate($builder, $options = null)
+    protected function scopeAccurate($builder, $resolver = null)
     {
         return app()->make(ManagerBuilder::class, ['builder' => $builder]);
     }
