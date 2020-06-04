@@ -158,10 +158,11 @@ class ManagerBuilder
 
         $casts = $this->model->accurate_push_casts ?? [];
 
-        if(!isset($casts[$item]) || $value === null) return $value;
+        if(!isset($casts[$item])) return $value;
 
         switch ($casts[$item]) {
             case 'Date':
+                if (is_null($value)) return null;
                 return date('d/m/Y', strtotime($value));
                 break;
 
