@@ -2,6 +2,8 @@
 
 namespace Endropie\AccurateClient\Tools;
 
+use Illuminate\Support\Facades\Event;
+
 class ManagerBuilder
 {
     public $api;
@@ -36,41 +38,44 @@ class ManagerBuilder
     {
         if (!$this->model) abort(501, 'Method Push not allowed! [error: model undefined]');
 
-        $methodingName = \Str::camel("accurate_pushing");
-        $methodedName = \Str::camel("accurate_pushed");
-
         $record = $this->getRecord();
 
         $record['id'] = $this->model->accurateKey();
 
-        if (method_exists($this->model, $methodingName))
-        {
-            $record = $this->model::$methodingName($record, $this->model);
-        }
+        $pushing = $this->mergeFireEvent('eloquent.accurate.pushing: '. get_class($this->model), [$this->model, $record]);
+        if ($pushing === false) return; else $record = array_merge($record, $pushing);
 
         $api = config('accurate.modules.'. $this->api->module);
-
         if (!$api) abort(501, "Module '".$this->api->module."' undefined");
 
         $uri = $this->manager->url($api['save']);
-
         if (!$api) abort(501, "Method 'save' Module '".$this->api->module."' undefined");
 
         $response = $this->manager->client()->get($uri, $record)->throw();
-
         if ($response->successful() && $response['s'])
         {
             $updateModel = $this->model;
             $updateModel->{$updateModel->accuratePrimaryKey} = $response['r']['id'];
             $updateModel->save();
 
-            if (method_exists($this, $methodedName))
-            {
-                $updateModel->$methodedName($record);
-            }
+            event('eloquent.accurate.pushed: '. get_class($this->model), [$this->model, $response['r']]);
         }
 
         return $response->json();
+    }
+
+    protected function mergeFireEvent($event, $args = [])
+    {
+        $result = [];
+        $pushing = event($event, $args);
+        $fires = collect($pushing);
+
+        foreach ($fires as $fire) {
+            if (!is_null($fire)) $result = array_merge($result, $fire);
+            if ($fire === false) return false;
+        }
+
+        return $result;
     }
 
     protected function getRecord ()
