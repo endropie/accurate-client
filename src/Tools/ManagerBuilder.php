@@ -25,13 +25,19 @@ class ManagerBuilder
 
     }
 
-    public function forget()
+    public function forget ()
     {
         if (!$this->model) abort(501, '[AACURATE] model property undefined!');
         $model = $this->model;
 
-        $model->{$model->accurate_primary_key} = null;
-        return $model->save();
+        $delete = $this->api->delete(['id' => $model->accurateKey()]);
+
+        if ($delete['s']) {
+            $model->{$model->accurate_primary_key} = null;
+            $model->save();
+        }
+
+        return $delete;
     }
 
     public function push ()
@@ -64,7 +70,7 @@ class ManagerBuilder
         return $response->json();
     }
 
-    protected function mergeFireEvent($event, $args = [])
+    protected function mergeFireEvent ($event, $args = [])
     {
         $result = [];
         $pushing = event($event, $args);
