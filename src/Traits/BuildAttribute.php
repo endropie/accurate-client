@@ -5,6 +5,21 @@ namespace Endropie\AccurateClient\Traits;
 trait BuildAttribute
 {
 
+    public function forget()
+    {
+        if (!$this->model) abort(501, '[AACURATE] model property undefined!');
+        $model = $this->model;
+
+        $delete = $this->api->delete(['id' => $model->accurateKey()]);
+
+        if ($delete['s']) {
+            $model->{$model->accurate_primary_key} = null;
+            $model->save();
+        }
+
+        return $delete;
+    }
+
     protected function getRecord ()
     {
         if (!$this->model) abort(501, 'Method getRecord not allowed! [error: model undefined]');
