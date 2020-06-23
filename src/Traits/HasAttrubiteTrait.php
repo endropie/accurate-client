@@ -18,6 +18,11 @@ trait HasAttrubiteTrait
         return !property_exists($this, 'accurate_primary_key') ? "accurate_model_id" : $this->accurate_primary_key;
     }
 
+    public function setAccuratePrimaryKeyAttribute ($key)
+    {
+        $this->accurate_primary_key = $key;
+    }
+
     public function getAccurateModelAttribute () : string
     {
         return !property_exists($this, 'accurate_model') ? [] : $this->accurate_model;
