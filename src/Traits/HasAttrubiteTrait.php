@@ -2,9 +2,6 @@
 
 namespace Endropie\AccurateClient\Traits;
 
-use Endropie\AccurateClient\Tools\ManagerBuilder;
-use InvalidArgumentException;
-
 trait HasAttrubiteTrait
 {
 

@@ -28,8 +28,10 @@ class AccurateProvider extends ServiceProvider
 
     protected function expectJsonResponse()
     {
-        if ($host = request()->header('X-Accurate-DB-Host')) session()->put('accurate.db.host', $host);
-        if ($session = request()->header('X-Accurate-DB-Session')) session()->put('accurate.db.session', $session);
-        if ($token = request()->header('X-Accurate-Auth-access_token')) session()->put('accurate.auth.access_token', $token);
+        if (request()->header('X-Accurate')) {
+            $session = (array) json_decode(decrypt(request()->header('X-Accurate')));
+            session()->put('accurate.auth', (array) $session['auth']);
+            session()->put('accurate.db', (array) $session['db']);
+        }
     }
 }

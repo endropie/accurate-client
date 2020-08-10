@@ -43,30 +43,30 @@ class Facade extends BaseFacade {
                 session()->put('accurate.auth', $auth);
                 $openDB =  static::manager()->setDatabase(config('accurate.database')) ;
 
-
-            if($redirected = session('accurate.redirect_uri'))
-            {
-                session()->forget('accurate.redirect_uri');
-
-                if (config('accurate.redirect_callback_data'))
+                if($redirected = session('accurate.redirect_uri'))
                 {
-                    $sdata = http_build_query([
-                        'accurate' => [
-                            'auth' => collect(session('accurate.auth'))->only(['access_token', 'refresh_token', 'expires_in'])->toArray(),
-                            'db' => session('accurate.db'),
-                        ]
-                    ]);
+                    session()->forget('accurate.redirect_uri');
 
-                    $sdata = (strpos($sdata, '?') === false)
-                        ? \Str::start($sdata, '?') : \Str::start($sdata, '&');
+                    if (config('accurate.redirect_callback_data'))
+                    {
+                        $xdata = encrypt(json_encode([
+                            'auth' => (array) collect(session('accurate.auth'))->only(['access_token', 'refresh_token', 'expires_in'])->toArray(),
+                            'db' => (array) session('accurate.db'),
+                            'unique' => uniqid(rand(), CRYPT_EXT_DES)
+                        ]));
 
-                    $redirected .= $sdata;
+                        $sdata = http_build_query(['X-Accurate' => $xdata]);
+
+                        $sdata = (strpos($sdata, '?') === false)
+                            ? \Str::start($sdata, '?') : \Str::start($sdata, '&');
+
+                        $redirected .= $sdata;
+                    }
+
+                    return redirect($redirected);
                 }
 
-                return redirect($redirected);
-            }
-
-            return $openDB;
+                return $openDB;
             }
             else return $response->json();
 
