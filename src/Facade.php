@@ -13,12 +13,14 @@ class Facade extends BaseFacade {
         return 'accurate';
     }
 
-    static function on ($module=null, $method=null, $values=[])
+    static function on ($module=null, $action=null, $values=[], $method=null)
     {
-        $url = static::manager()->url(config("accurate.modules.$module.$method"));
-        $exe = static::manager()->client()->get($url, $values)->throw();
+        $url = static::manager()->url(config("accurate.modules.$module.$action"));
+        $exe = $method
+          ? static::manager()->client()->{$method}($url, $values)
+          : static::manager()->client()->asForm()->get($url, $values);
 
-        return $exe->json();
+        return $exe->throw();
     }
 
     static function routes ()

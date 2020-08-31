@@ -48,7 +48,7 @@ class ManagerBuilder
 
         $record = $this->getRecord();
 
-        $record['id'] = $this->model->accurateKey();
+        if ($this->model->accurateKey()) $record['id'] = $this->model->accurateKey();
 
         $pushing = $this->mergeFireEvent('eloquent.accurate.pushing: '. get_class($this->model), [$this->model, $record]);
         if ($pushing === false) return; else $record = array_merge($record, $pushing);
@@ -58,8 +58,8 @@ class ManagerBuilder
 
         $uri = $this->manager->url($api['save']);
         if (!$api) abort(501, "Method 'save' Module '".$this->api->module."' undefined");
-
-        $response = $this->manager->client()->get($uri, $record)->throw();
+        // abort(501, json_encode($record));
+        $response = $this->manager->client()->post($uri, $record)->throw();
         if ($response->successful() && $response['s'])
         {
             $updateModel = $this->model;

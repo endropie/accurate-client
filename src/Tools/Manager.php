@@ -34,7 +34,7 @@ class Manager extends Facade
 
             $headers = ['X-Session-ID' => $session];
 
-            $client = Http::asForm()->withToken($token)->withHeaders($headers);
+            $client = Http::withToken($token)->withHeaders($headers);
 
             return $client;
         }
