@@ -42,11 +42,11 @@ class ManagerBuilder
         return $delete;
     }
 
-    public function push ()
+    public function push ($record = [])
     {
         if (!$this->model) abort(501, 'Method Push not allowed! [error: model undefined]');
 
-        $record = $this->getRecord();
+        $record = array_merge($this->getRecord(), $record);
 
         if ($this->model->accurateKey()) $record['id'] = $this->model->accurateKey();
 
