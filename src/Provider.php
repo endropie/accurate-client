@@ -5,13 +5,17 @@ namespace Endropie\AccurateClient;
 use Endropie\AccurateClient\Tools\Manager;
 use Illuminate\Support\ServiceProvider;
 
-class AccurateProvider extends ServiceProvider
+class Provider extends ServiceProvider
 {
 
     public function register()
     {
-        $this->app->bind('accurate', function ($app) {
+        $this->app->singleton('accurate', function ($app) {
             return new Manager($app);
+        });
+
+        $this->app->singleton('http-accurate', function ($app) {
+            return new \Illuminate\Http\Client\Factory;
         });
 
         $this->mergeConfigFrom(__DIR__.'/config/accurate.php', 'accurate');
@@ -20,7 +24,7 @@ class AccurateProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/accurate.php' => config_path('accurate.php'),
+            __DIR__.'/config/accurate.php' => base_path('config/accurate.php'),
         ]);
 
         $this->expectJsonResponse();
@@ -30,8 +34,9 @@ class AccurateProvider extends ServiceProvider
     {
         if (request()->header('X-Accurate')) {
             $session = (array) json_decode(decrypt(request()->header('X-Accurate')));
-            session()->put('accurate.auth', (array) $session['auth']);
-            session()->put('accurate.db', (array) $session['db']);
+
+            config()->set('accurate.session.auth', (array) $session['auth']);
+            config()->set('accurate.session.db', (array) $session['db']);
         }
     }
 }

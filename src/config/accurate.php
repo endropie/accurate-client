@@ -1,17 +1,14 @@
 <?php
 return [
 
-    "database" => env('ACCURATE_DATABASE', null),
+    "database" => [
+        "id" => env('ACCURATE_DATABASE', null)
+    ],
 
-    "login_route" => "/accurate/login",
-
-    "callback_route" => "/accurate/callback",
-
-    "redirect_autologin" => false,
-
-    "redirect_back_route" => false,
-
-    "redirect_callback_data" => false,
+    "route" => [
+        "login" => "/accurate/login",
+        "callback" => "/accurate/callback",
+    ],
 
     "scope" => [
         "item_view", "item_save",
